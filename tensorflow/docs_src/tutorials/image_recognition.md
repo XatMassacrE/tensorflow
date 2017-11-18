@@ -1,9 +1,12 @@
 # Image Recognition
+# 图像识别
 
 Our brains make vision seem easy. It doesn't take any effort for humans to
 tell apart a lion and a jaguar, read a sign, or recognize a human's face.
 But these are actually hard problems to solve with a computer: they only
 seem easy because our brains are incredibly good at understanding images.
+我们的大脑视觉成像似乎很容易。区别狮子和美洲豹，识别路标或者辨认人脸这些行为对于人来说都是小菜一碟。
+但是对于计算机来说有些问题真的太难解决了：而这仅仅是因为我们的大脑在识别图像这方面实力超群。
 
 In the last few years the field of machine learning has made tremendous
 progress on addressing these difficult problems. In particular, we've
@@ -11,17 +14,27 @@ found that a kind of model called a deep
 [convolutional neural network](https://colah.github.io/posts/2014-07-Conv-Nets-Modular/)
 can achieve reasonable performance on hard visual recognition tasks --
 matching or exceeding human performance in some domains.
+在过去的几年中机器学习领域在解决这些困难的问题方面取得的了巨大的进步。
+尤其是，我们已经发现了一种叫做深度[卷积神经网络](https://colah.github.io/posts/2014-07-Conv-Nets-Modular/)
+的模型，它在强图像识别任务上的表现已经非常可观--即在一些领域已经有了相当于或超过人类的表现。
 
 Researchers have demonstrated steady progress
 in computer vision by validating their work against
 [ImageNet](http://www.image-net.org) -- an academic benchmark for computer vision.
 Successive models continue to show improvements, each time achieving
 a new state-of-the-art result:
+计算机视觉的研究人员将他们的成果和 [ImageNet](http://www.image-net.org)（一个计算机视觉的理论基准测试程序）
+进行校验和对抗，结果表明他们已经取得了稳定的进步。
+这些有继承关系的模型持续的展示着它们的进步，每次都会实现新的成果：
 [QuocNet], [AlexNet], [Inception (GoogLeNet)], [BN-Inception-v2].
 Researchers both internal and external to Google have published papers describing all
 these models but the results are still hard to reproduce.
 We're now taking the next step by releasing code for running image recognition
 on our latest model, [Inception-v3].
+----------------------------------    need delete
+[QuocNet], [AlexNet], [Inception (GoogLeNet)], [BN-Inception-v2]。
+Google 内部和外部的研究人员也都发表了一些论文来描述所有的这些模型，但是成果仍然很难再现。
+我们接下来要做的就是运行我们最新的图像识别模型--[Inception-v3]。
 
 [QuocNet]: https://static.googleusercontent.com/media/research.google.com/en//archive/unsupervised_icml2012.pdf
 [AlexNet]: https://www.cs.toronto.edu/~fritz/absps/imagenet.pdf
@@ -34,6 +47,9 @@ using the data from 2012. This is a standard task in computer vision,
 where models try to classify entire
 images into [1000 classes], like "Zebra", "Dalmatian", and "Dishwasher".
 For example, here are the results from [AlexNet] classifying some images:
+Inception-v3 从 2012 年就开始使用 [ImageNet] 的大型图像识别挑战的数据来训练了。
+将所有的图片分成像"斑马"，"达尔马西亚狗"，"洗碗工"等 [1000 个类别] 是计算机视觉领域的一个标准任务，
+例如下面这些图片就是 [AlexNet] 模型分类的结果：
 
 <div style="width:50%; margin:auto; margin-bottom:10px; margin-top:20px;">
 <img style="width:100%" src="https://www.tensorflow.org/images/AlexClassification.png">
