@@ -60,10 +60,15 @@ correct answer as one of their top 5 guesses -- termed "top-5 error rate".
 [AlexNet] achieved by setting a top-5 error rate of 15.3% on the 2012
 validation data set; [Inception (GoogLeNet)] achieved 6.67%; 
 [BN-Inception-v2] achieved 4.9%; [Inception-v3] reaches 3.46%.
+为了和其他模型进行比较，我们通过检查，将模型预测的前五个猜测不包含正确答案的的频率称作--
+"前五误差率"。[AlexNet] 在 2012 年验证数据集上的前五误差率是 15。3%；[Inception (GoogLeNet)] 
+是 6.67%；[BN-Inception-v2] 是 4.9%；[Inception-v3] 则达到了 3.46%。
 
 > How well do humans do on ImageNet Challenge? There's a [blog post] by
 Andrej Karpathy who attempted to measure his own performance. He reached
 5.1% top-5 error rate.
+> 人类在 ImageNet 挑战上的表现如何呢？这里有一篇 Andrej Karpathy 写的 [blog post]。
+他的前五误差率是 5.1%。
 
 [ImageNet]: http://image-net.org/
 [1000 classes]: http://image-net.org/challenges/LSVRC/2014/browse-synsets
@@ -73,28 +78,38 @@ This tutorial will teach you how to use [Inception-v3]. You'll learn how to
 classify images into [1000 classes] in Python or C++. We'll also discuss how to
 extract higher level features from this model which may be reused for other
 vision tasks.
+本文将指导你如何使用 [Inception-v3]。你将学习到如何使用 Python 或 C++ 
+把图片分成 [1000 种类别]。同时，我们也会讨论如何从这个可以用于其他视觉任务的模型中
+提取出更高层的特征。
 
 We're excited to see what the community will do with this model.
+让我们来看一看社区是如何使用这个模型的。
 
 
 ##Usage with Python API
+## Python API 的使用
 
 `classify_image.py` downloads the trained model from `tensorflow.org`
 when the program is run for the first time. You'll need about 200M of free space
 available on your hard disk.
+`classify_image.py` 这个程序在第一次运行的时候会从 `tensorflow.org` 下载训练好的模型。
+你需要保证你的硬盘有 200M 的可用空间。
 
 Start by cloning the [TensorFlow models repo](https://github.com/tensorflow/models) from GitHub. Run the following commands:
+从 clone [TensorFlow models repo](https://github.com/tensorflow/models) 这个项目开始。运行下面的命令：
 
     cd models/tutorials/image/imagenet
     python classify_image.py
 
 The above command will classify a supplied image of a panda bear.
+上面的命令将会对提供的一张熊猫图片进行分类。
 
 <div style="width:15%; margin:auto; margin-bottom:10px; margin-top:20px;">
   <img style="width:100%" src="https://www.tensorflow.org/images/cropped_panda.jpg">
 </div>
 
 If the model runs correctly, the script will produce the following output:
+如何模型运行正常，则会输出下面的信息：
 
     giant panda, panda, panda bear, coon bear, Ailuropoda melanoleuca (score = 0.88493)
     indri, indris, Indri indri, Indri brevicaudatus (score = 0.00878)
@@ -104,16 +119,22 @@ If the model runs correctly, the script will produce the following output:
 
 If you wish to supply other JPEG images, you may do so by editing
 the `--image_file` argument.
+如果你想提供 JPEG 类型的图片，那么你需要编辑 `--image_file` 这个参数。
 
 > If you download the model data to a different directory, you
 will need to point `--model_dir`  to the directory used.
+> 如果你下载的模型数据在另一个目录，那么
+你需要通过 `--model_dir` 来指定那个目录。
 
 ## Usage with the C++ API
+## C++ API 的使用
 
 You can run the same [Inception-v3] model in C++ for use in production
 environments. You can download the archive containing the GraphDef that defines
 the model like this (running from the root directory of the TensorFlow
 repository):
+你可以在生产环境运行同样的 [Inception-v3] C++ 版本的模型。
+你可以下载包含 GraphDef 的归档，GraphDef 可以像这样定义模型（在 TensorFlow 的根目录下运行）：
 
 ```bash
 curl -L "https://storage.googleapis.com/download.tensorflow.org/models/inception_v3_2016_08_28_frozen.pb.tar.gz" |
@@ -125,12 +146,17 @@ If you've followed
 @{$install_sources$the instructions to download the source installation of TensorFlow}
 for your platform, you should be able to build the example by
 running this command from your shell terminal:
+下一步我们需要编译包含载入和运行 graph 代码的 C++ 库。
+如果你做过了
+@{$install_sources$the instructions to download the source installation of TensorFlow}
+这一步，你应该就可以通过在你的终端中运行下面的的密令来编译示例了：
 
 ```bash
 bazel build tensorflow/examples/label_image/...
 ```
 
 That should create a binary executable that you can then run like this:
+它会创建一个二进制的可执行文件，你可以像这样来运行它：
 
 ```bash
 bazel-bin/tensorflow/examples/label_image/label_image
@@ -138,6 +164,7 @@ bazel-bin/tensorflow/examples/label_image/label_image
 
 This uses the default example image that ships with the framework, and should
 output something similar to this:
+这里使用默认的图像框架所附带的示例，将会输出类似下面的内容：
 
 ```
 I tensorflow/examples/label_image/main.cc:206] military uniform (653): 0.834306
@@ -150,6 +177,8 @@ In this case, we're using the default image of
 [Admiral Grace Hopper](https://en.wikipedia.org/wiki/Grace_Hopper), and you can
 see the network correctly identifies she's wearing a military uniform, with a high
 score of 0.8.
+在这种情况下，我们使用默认图片 [Admiral Grace Hopper](https://en.wikipedia.org/wiki/Grace_Hopper)，
+你可以看到网络使用 0.8 的高分正确的标识出了她穿的是军装。
 
 
 <div style="width:45%; margin:auto; margin-bottom:10px; margin-top:20px;">
@@ -157,6 +186,7 @@ score of 0.8.
 </div>
 
 Next, try it out on your own images by supplying the --image= argument, e.g.
+下面你可以通过 --image 参数来检测一张自己的图片试试，例如：
 
 ```bash
 bazel-bin/tensorflow/examples/label_image/label_image --image=my_image.png
