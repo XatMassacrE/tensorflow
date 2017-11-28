@@ -1,21 +1,34 @@
 # Vector Representations of Words
+# 用向量代表单词
 
 In this tutorial we look at the word2vec model by
 [Mikolov et al.](https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf)
 This model is used for learning vector representations of words, called "word
 embeddings".
+本文让我们来通过 
+[Mikolov et al.](https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf) 
+来看看 word2vec 这个模型，它被用来学习叫做『单词嵌入』的功能，
+这个功能可以使用向量来代表单词。
 
 ## Highlights
+## 集锦
 
 This tutorial is meant to highlight the interesting, substantive parts of
 building a word2vec model in TensorFlow.
+本文收录了用 TensorFlow 构建一个 word2vec 模型的部分有趣真实的细节。
 
 * We start by giving the motivation for why we would want to
 represent words as vectors.
+* 首先我们需要知道为什么我们想要
+  使用向量来代表单词。
 * We look at the intuition behind the model and how it is trained
 (with a splash of math for good measure).
+* 其次我们需要看到模型背后的直觉以及它是如何被训练的
+  （使用数学的奇技淫巧来进行测量）。
 * We also show a simple implementation of the model in TensorFlow.
+* 同时我们也会使用 TensorFlow 实现一个简单的模型。
 * Finally, we look at ways to make the naive version scale better.
+* 最后，我们会看到让本地版本的拓展的更好的各种方法。
 
 We walk through the code later during the tutorial, but if you'd prefer to dive
 straight in, feel free to look at the minimalistic implementation in
@@ -27,12 +40,26 @@ the basic version, you can graduate to
 which is a more serious implementation that showcases some more advanced
 TensorFlow principles about how to efficiently use threads to move data into a
 text model, how to checkpoint during training, etc.
+本文只会粗略的过一遍代码，如果你想深入了解的话，
+可以去 [tensorflow/examples/tutorials/word2vec/word2vec_basic.py](https://www.tensorflow.org/code/tensorflow/examples/tutorials/word2vec/word2vec_basic.py) 
+看到一个极简的实现。
+这个基础的示例包含需要下载的数据的代码，稍微训练一下这些数据
+然后把结果可视化出来。一旦你可以轻松的阅读并运行这个基础的版本，
+你就可以去看 
+[models/tutorials/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow_models/tutorials/embedding/word2vec.py) 了，
+这是一个更严谨的实现，它展示了一些更高级的 TensorFlow 原则，
+例如如何高效的使用线程
+来将数据移动到一个文本模型中，以及如何在训练中设置检查点等。
 
 But first, let's look at why we would want to learn word embeddings in the first
 place. Feel free to skip this section if you're an Embedding Pro and you'd just
 like to get your hands dirty with the details.
+首先，让我们来看一看为什么我们想要学习词向量。
+如果你是一个词嵌入专家的话，可以直接跳过本节，不然
+看到这些细节你会觉得很无聊。
 
 ## Motivation: Why Learn Word Embeddings?
+## 动机：为什么要学习词向量？
 
 Image and audio processing systems work with rich, high-dimensional datasets
 encoded as vectors of the individual raw pixel-intensities for image data, or
@@ -49,6 +76,22 @@ very little of what it has learned about 'cats' when it is processing data about
 words as unique, discrete ids furthermore leads to data sparsity, and usually
 means that we may need more data in order to successfully train statistical
 models.  Using vector representations can overcome some of these obstacles.
+图像和音频处理系统在处理丰富，高维度的数据集时会将
+图像的单个像素信号量或
+音频的功率谱密度系数编码成向量。对于图像识别或者
+语音识别这样的任务来说，我们知道要成功的识别出正确结果的所有信息
+都在数据里（因为人类可以从这些原始数据中得到答案）。
+然而，传统的自然语言处理系统将
+单词看做确定的原子符号，因此 `Id537` 会代表 'cat'，
+`Id143` 会代表 'dog'。这些编码都是任意的，
+并且它们对于单个字符之间的关系系统
+毫无帮助。这意味着当模型处理关于 'dogs' 数据的时候，
+基本上用不到它从处理 'cats' 上学到的知识
+（然而它们有很多共同点，都是动物，四条腿，宠物等）。
+将单词表示成唯一离散的 id，这样会使数据变的稀疏，
+通常情况下这意味着为了成功的训练统计模型，我们需要更多的数据。
+而使用向量代表单词就可以克服这些困难。
+
 
 <div style="width:100%; margin:auto; margin-bottom:10px; margin-top:20px;">
 <img style="width:100%" src="https://www.tensorflow.org/images/audio-image-text.png" alt>
@@ -67,6 +110,19 @@ divided into two categories: *count-based methods* (e.g.
 and *predictive methods* (e.g.
 [neural probabilistic language models](http://www.scholarpedia.org/article/Neural_net_language_models)).
 
+[Vector space models](https://en.wikipedia.org/wiki/Vector_space_model) (VSMs)
+是在一个连续的向量空间中代表单词，
+并且把语义上相似的单词映射到它附近的点
+（就是这些单词彼此都靠的很近）。
+VSMs 在 NLP 领域中历史悠久，但是它依赖的所有方法在某种程度上
+都是分享语义上的意思，或者声明相同上下文中出现的单词 
+[Distributional Hypothesis](https://en.wikipedia.org/wiki/Distributional_semantics#Distributional_Hypothesis)。
+而另一个不同的利用这个原则的方法是
+深入下面两个分类：*计数方法*（例如：
+[Latent Semantic Analysis](https://en.wikipedia.org/wiki/Latent_semantic_analysis))，
+和 *预测方法*（例如：
+[neural probabilistic language models](http://www.scholarpedia.org/article/Neural_net_language_models))。
+
 This distinction is elaborated in much more detail by
 [Baroni et al.](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf),
 but in a nutshell: Count-based methods compute the statistics of
@@ -75,6 +131,13 @@ and then map these count-statistics down to a small, dense vector for each word.
 Predictive models directly try to predict a word from its neighbors in terms of
 learned small, dense *embedding vectors* (considered parameters of the
 model).
+[Baroni et al.](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf) 
+更详细的阐述了这种区别，
+但是一言以蔽之就是：计数方法会计算在一个大文本集中一些单词以及它们类似单词一起出现的频率，
+然后将每一个单词的
+这些统计数据降维到一个小而密的向量。
+预测模型则是根据学习到的小而密的*词向量*（模型深思熟虑的参数）来
+直接从它的邻近单词中预测出单词。
 
 Word2vec is a particularly computationally-efficient predictive model for
 learning word embeddings from raw text. It comes in two flavors, the Continuous
