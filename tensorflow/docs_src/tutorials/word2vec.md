@@ -151,15 +151,31 @@ entire context as one observation). For the most part, this turns out to be a
 useful thing for smaller datasets. However, skip-gram treats each context-target
 pair as a new observation, and this tends to do better when we have larger
 datasets. We will focus on the skip-gram model in the rest of this tutorial.
+对于从源数据中学习词向量来说，Word2vec 是一个计算效率很高的预测模型。
+这其中包含两层含义，
+Continuous Bag-of-Words（CBOW）和 Skip-Gram 模型（[Mikolov et al.](https://arxiv.org/pdf/1301.3781.pdf) 中的 3.1 和 3.2 章节）。从算法角度来说，
+这些模型是类似的，CBOW 是从源上下文数据（'the cat sits on the'）中预测出目标单词（比如 'mat'），
+skip-gram 则相反，它是从目标单词中预测出源上下文数据。这种反向操作可能
+看起来很随意，但是从统计的角度讲，它是有效的，因为 CBOW 可以消除
+很多分散的信息（通过将整个上下文看做一个观察点）。在大多数情况下，这种操作
+对于小一点的数据集也是适用的。然而，skip-gram 将每一个上下文目标对
+都看做一个新的观察点，这样对于更大的数据集是更有利的。
+在下面的篇幅中，我们将主要来看 skip-gram 这个模型。
 
 
 ## Scaling up with Noise-Contrastive Training
+## 放大对比噪音训练
 
 Neural probabilistic language models are traditionally trained using the
 [maximum likelihood](https://en.wikipedia.org/wiki/Maximum_likelihood) (ML)
 principle  to maximize the probability of the next word \\(w_t\\) (for "target")
 given the previous words \\(h\\) (for "history") in terms of a
 [*softmax* function](https://en.wikipedia.org/wiki/Softmax_function),
+神经概率语言模型是使用 
+[maximum likelihood](https://en.wikipedia.org/wiki/Maximum_likelihood) (ML) 
+定理来将下一个单词的概率最大化，根据 
+[*softmax* function](https://en.wikipedia.org/wiki/Softmax_function) 这个函数
+来j
 
 $$
 \begin{align}
