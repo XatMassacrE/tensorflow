@@ -1,11 +1,11 @@
 # 图像识别
 
-我们的大脑视觉成像似乎很容易。区别狮子和美洲豹，识别路标或者辨认人脸这些行为对于人来说都是小菜一碟。
+我们的大脑视觉成像似乎很容易。区分狮子和美洲豹，识别路标或者辨认人脸这些行为对于人来说都是小菜一碟。
 但是对于计算机来说有些问题真的太难解决了：但是这仅仅是因为我们的大脑在识别图像这方面实力超群。
 
-在过去的几年中机器学习领域在解决这些困难的问题方面取得的了巨大的进步。
-尤其是，我们已经发现了一种叫做深度[卷积神经网络](https://colah.github.io/posts/2014-07-Conv-Nets-Modular/)
-的模型，它在强图像识别任务上的表现已经非常可观--即在一些领域已经有了相当或超过人类的表现。
+在过去的几年中，机器学习领域在解决这些困难的问题方面取得了巨大的进步。
+尤其是，我们已经发现了一种叫做深度 [卷积神经网络](https://colah.github.io/posts/2014-07-Conv-Nets-Modular/) 的
+模型，它在强图像识别任务上的表现已经非常可观--即在一些领域已经有了相当或超过人类的表现。
 
 计算机视觉的研究人员将他们的成果和 [ImageNet](http://www.image-net.org)（一个计算机视觉的理论基准测试程序）
 进行校验和对抗，结果表明他们已经取得了稳定的进步。
@@ -20,6 +20,8 @@ Google 内部和外部的研究人员也都发表了一些论文来描述所有�
 [BN-Inception-v2]: https://arxiv.org/abs/1502.03167
 [Inception-v3]: https://arxiv.org/abs/1512.00567
 
+Inception-v3 从 2012 年就开始使用数据针对 [ImageNet] 这个
+大型视觉挑战任务训练了。
 将所有的图片分成像"斑马"，"达尔马西亚狗"，"洗碗工"等 [1000 个类别] 是计算机视觉领域的一个标准任务，
 例如下面这些图片就是 [AlexNet] 模型分类的结果：
 
@@ -27,7 +29,7 @@ Google 内部和外部的研究人员也都发表了一些论文来描述所有�
 <img style="width:100%" src="https://www.tensorflow.org/images/AlexClassification.png">
 </div>
 
-为了和其他模型进行比较，我们通过检查，将模型预测的前五个猜测不包含正确答案的的频率称作--
+为了和其他模型进行比较，我们通过检查，将前五次测试中模型未能正确预测的频率称作--
 "前五误差率"。[AlexNet] 在 2012 年验证数据集上的前五误差率是 15.3%；[Inception (GoogLeNet)] 
 是 6.67%；[BN-Inception-v2] 是 4.9%；[Inception-v3] 则达到了 3.46%。
 
@@ -61,7 +63,7 @@ Google 内部和外部的研究人员也都发表了一些论文来描述所有�
   <img style="width:100%" src="https://www.tensorflow.org/images/cropped_panda.jpg">
 </div>
 
-如何模型运行正常，则会输出下面的信息：
+如果模型运行正常，则会输出下面的信息：
 
     giant panda, panda, panda bear, coon bear, Ailuropoda melanoleuca (score = 0.88493)
     indri, indris, Indri indri, Indri brevicaudatus (score = 0.00878)
@@ -76,7 +78,7 @@ Google 内部和外部的研究人员也都发表了一些论文来描述所有�
 
 ## C++ API 的使用
 
-你可以在生产环境运行同样的 [Inception-v3] C++ 版本的模型。
+你可以在生产环境运行 C++ 版本的 [Inception-v3] 模型。
 你还可以下载包含 GraphDef 的归档，GraphDef 可以像这样定义模型（在 TensorFlow 的根目录下运行）：
 
 ```bash
@@ -116,7 +118,7 @@ I tensorflow/examples/label_image/main.cc:206] bulletproof vest (466): 0.0053508
   <img style="width:100%" src="https://www.tensorflow.org/images/grace_hopper.jpg">
 </div>
 
-下面你可以通过 --image 参数来检测一张自己的图片试试，例如：
+下面你可以通过 --image= 参数来检测一张自己的图片试试，例如：
 
 ```bash
 bazel-bin/tensorflow/examples/label_image/label_image --image=my_image.png
@@ -143,8 +145,8 @@ bazel-bin/tensorflow/examples/label_image/label_image --image=my_image.png
 这个函数是如何应用在一张图片上的。
 
 ```C++
-// Given an image file name, read in the data, try to decode it as an image,
-// resize it to the requested size, and then scale the values as desired.
+// 给定一张图片的文件名，读取它的数据，接着按照图片来解码，
+// 缩放成我们需要的大小，然后按比例转换成我们想要的值。
 Status ReadTensorFromImageFile(string file_name, const int input_height,
                                const int input_width, const float input_mean,
                                const float input_std,
@@ -166,12 +168,12 @@ Status ReadTensorFromImageFile(string file_name, const int input_height,
 然后传给 `ReadFile` 这个操作当做第一个输入。或许你会注意到我们把 `b.opts()` 这个参数当做
 最后一个参数传递给所有的创建函数。这个参数可以确保节点被添加到 `GraphDefBuilder` 定义的模型中。
 同时我们也通过 `b.opts()` 调用 `WithName()` 来给 `ReadFile` 这个操作命名。
-这个操作给了节点一个名字，当然了，这个操作其实并不是强制的，因为如果你不这样做的话，
+这个操作给了节点一个名字，当然了，这个操作其实并不是强制的，即使如果你不这样做，
 程序也会自动分配一个名字，但是这样不利于调试。
 
 
 ```C++
-  // Now try to figure out what kind of file it is and decode it.
+  // 现在让我们试着搞清楚它的文件类型，并解码。
   const int wanted_channels = 3;
   tensorflow::Node* image_reader;
   if (tensorflow::StringPiece(file_name).ends_with(".png")) {
@@ -179,38 +181,38 @@ Status ReadTensorFromImageFile(string file_name, const int input_height,
         file_reader,
         b.opts().WithAttr("channels", wanted_channels).WithName("png_reader"));
   } else {
-    // Assume if it's not a PNG then it must be a JPEG.
+    // 如果它不是 PNG，那么就一定是 JPEG 了。
     image_reader = tensorflow::ops::DecodeJpeg(
         file_reader,
         b.opts().WithAttr("channels", wanted_channels).WithName("jpeg_reader"));
   }
-  // Now cast the image data to float so we can do normal math on it.
+  // 现在将图片数据转换成浮点型，这样我们就可以正常的计算它了。
   tensorflow::Node* float_caster = tensorflow::ops::Cast(
       image_reader, tensorflow::DT_FLOAT, b.opts().WithName("float_caster"));
-  // The convention for image ops in TensorFlow is that all images are expected
-  // to be in batches, so that they're four-dimensional arrays with indices of
-  // [batch, height, width, channel]. Because we only have a single image, we
-  // have to add a batch dimension of 1 to the start with ExpandDims().
+  // 在 TensorFlow 中图片操作的惯例就是所有的图片都是批量操作的，
+  // 所以它们是由 [batch, height, width, channel] 组成的 4 维数组。
+  // 因为我们只有一张图片，所以我们
+  // 必须一个 1 的 batch 维度，这样才能使用 ExpandDims()。
   tensorflow::Node* dims_expander = tensorflow::ops::ExpandDims(
       float_caster, tensorflow::ops::Const(0, b.opts()), b.opts());
-  // Bilinearly resize the image to fit the required dimensions.
+  // 双向调整，将我图片变成我们需要的维度。
   tensorflow::Node* resized = tensorflow::ops::ResizeBilinear(
       dims_expander, tensorflow::ops::Const({input_height, input_width},
                                             b.opts().WithName("size")),
       b.opts());
-  // Subtract the mean and divide by the scale.
+  // 减去平均值并除以缩放的比例
   tensorflow::ops::Div(
       tensorflow::ops::Sub(
           resized, tensorflow::ops::Const({input_mean}, b.opts()), b.opts()),
       tensorflow::ops::Const({input_std}, b.opts()),
       b.opts().WithName(output_name));
 ```
-然后我们持续添加更多的节点，然后把文件数据当做图片来解码，将整型数值转换成浮点型数值，
+下面我们继续添加节点，然后把文件数据当做图片来解码，将整型数值转换成浮点型数值，
 重新缩放，最后我们在像素值上进行提取和视觉的操作。
 
 ```C++
-  // This runs the GraphDef network definition that we've just constructed, and
-  // returns the results in the output tensor.
+  // 这里执行了我们刚构造的 GraphDef 的网络定义，
+  // 然后会在输出的 tensor 中返回一个结果。
   tensorflow::GraphDef graph;
   TF_RETURN_IF_ERROR(b.ToGraphDef(&graph));
 ```
@@ -239,8 +241,8 @@ Status ReadTensorFromImageFile(string file_name, const int input_height,
 你可以在 `LoadGraph()` 这个函数中看到我们是怎么做的。
 
 ```C++
-// Reads a model graph definition from disk, and creates a session object you
-// can use to run it.
+// 从硬盘读取一个模型 graph 的定义，
+// 创建一个你可以使用的 session 对象来运行它。
 Status LoadGraph(string graph_file_name,
                  std::unique_ptr<tensorflow::Session>* session) {
   tensorflow::GraphDef graph_def;
@@ -272,23 +274,24 @@ Status LoadGraph(string graph_file_name,
 在这种情况下他们代表着有序的得分以及最高分结果的下标位置。
 
 ```C++
-// Analyzes the output of the Inception graph to retrieve the highest scores and
-// their positions in the tensor, which correspond to categories.
+// 分析 Inception graph 的输出信息，并且在它们相关的分类上获取
+// 最高的得分以及在 tensor 中的位置。
 Status GetTopLabels(const std::vector<Tensor>& outputs, int how_many_labels,
                     Tensor* indices, Tensor* scores) {
   tensorflow::GraphDefBuilder b;
   string output_name = "top_k";
   tensorflow::ops::TopK(tensorflow::ops::Const(outputs[0], b.opts()),
                         how_many_labels, b.opts().WithName(output_name));
-  // This runs the GraphDef network definition that we've just constructed, and
-  // returns the results in the output tensors.
+  // 这里执行了我们刚构造的 GraphDef 的网络定义，
+  // 然后会在输出的 tensor 中返回一个结果。
+  
   tensorflow::GraphDef graph;
   TF_RETURN_IF_ERROR(b.ToGraphDef(&graph));
   std::unique_ptr<tensorflow::Session> session(
       tensorflow::NewSession(tensorflow::SessionOptions()));
   TF_RETURN_IF_ERROR(session->Create(graph));
-  // The TopK node returns two outputs, the scores and their original indices,
-  // so we have to append :0 and :1 to specify them both.
+  // TopK 这个节点返回了两个输出，得分和他们的原始下标，
+  // 所以我们需要添加 :0 和 :1 来区分它们。
   std::vector<Tensor> out_tensors;
   TF_RETURN_IF_ERROR(session->Run({}, {output_name + ":0", output_name + ":1"},
                                   {}, &out_tensors));
@@ -305,7 +308,7 @@ Status GetTopLabels(const std::vector<Tensor>& outputs, int how_many_labels,
 
 ```C++
 int main(int argc, char* argv[]) {
-  // We need to call this to set up global state for TensorFlow.
+  // 我们需要调用这个函数来设置 TensorFlow 的全局状态。
   tensorflow::port::InitMain(argv[0], &argc, &argv);
   Status s = tensorflow::ParseCommandLineFlags(&argc, argv);
   if (!s.ok()) {
@@ -313,7 +316,7 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
-  // First we load and initialize the model.
+  // 首先我们加载并初始化模型。
   std::unique_ptr<tensorflow::Session> session;
   string graph_path = tensorflow::io::JoinPath(FLAGS_root_dir, FLAGS_graph);
   Status load_graph_status = LoadGraph(graph_path, &session);
@@ -325,8 +328,8 @@ int main(int argc, char* argv[]) {
 我们加载主 graph。
 
 ```C++
-  // Get the image from disk as a float array of numbers, resized and normalized
-  // to the specifications the main graph expects.
+  // 从硬盘中获取图片并转换成浮点数组，
+  // 调整大小并标准化成主 graph 要求的格式。
   std::vector<Tensor> resized_tensors;
   string image_path = tensorflow::io::JoinPath(FLAGS_root_dir, FLAGS_image);
   Status read_tensor_status = ReadTensorFromImageFile(
@@ -341,7 +344,7 @@ int main(int argc, char* argv[]) {
 载入，缩放以及处理输入的图片。
 
 ```C++
-  // Actually run the image through the model.
+  // 真正的通过模型执行图片
   std::vector<Tensor> outputs;
   Status run_status = session->Run({{FLAGS_input_layer, resized_tensor}},
                                    {FLAGS_output_layer}, {}, &outputs);
@@ -353,9 +356,9 @@ int main(int argc, char* argv[]) {
 这里我们运行使用图片作为输入的已经载入的 graph。
 
 ```C++
-  // This is for automated testing to make sure we get the expected result with
-  // the default settings. We know that label 866 (military uniform) should be
-  // the top label for the Admiral Hopper image.
+  // 这里是为了保证我们在默认设置下得到了我们想要结果的自动测试程序。
+  // 我们知道标签 866 (军装）应该
+  // 是 Admiral Hopper 图片的最高层标签。
   if (FLAGS_self_test) {
     bool expected_matches;
     Status check_status = CheckTopLabel(outputs, 866, &expected_matches);
@@ -372,7 +375,7 @@ int main(int argc, char* argv[]) {
 为了测试，我们检查一下以确保我们得到了我们想要的结果。
 
 ```C++
-  // Do something interesting with the results we've generated.
+  // 用我们生成的结果做一些有趣的事情。
   Status print_status = PrintTopLabels(outputs, FLAGS_labels);
 ```
 最终我们把我们找到的标签打印出来。
@@ -388,7 +391,7 @@ int main(int argc, char* argv[]) {
 它的 `ok()` 检查器可以让你知道是否有任何异常发生，并且还可以以可读的错误信息的形式
 把它们打印出来。
 
-这里我们展示了图像识别，但是你应该能够在各种各样的领域中以及任何你发现或者你自己训练的模型中使用这些
+这里我们只展示了目标识别，但是你应该能够在各种各样的领域中以及任何你发现或者你自己训练的模型中使用这些
 相似的代码。
 
 > **练习**：迁移学习是这样的一种概念，就是如果你知道如何解决好这个问题，
@@ -414,6 +417,6 @@ Michael Nielsen 的书中也有一章
 TensorFlow @{$deep_cnn$deep convolutional networks tutorial} 查看，
 或者跟随我们的 @{$beginners$ML beginner} 或 @{$pros$ML expert} MNIST 入门指南来
 慢慢来学习。最后，如果你想快速提升在这个领域的研究，
-你可以
-阅读这篇指南所有引用到的论文的最新的工作和进展。
+可以
+阅读本篇指南引用的所有论文以及他们近期的工作。
 
