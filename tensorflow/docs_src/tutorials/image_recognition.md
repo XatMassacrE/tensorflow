@@ -22,7 +22,7 @@ Google 内部和外部的研究人员也都发表了一些论文来描述所有�
 
 Inception-v3 从 2012 年就开始使用数据针对 [ImageNet] 这个
 大型视觉挑战任务训练了。
-将所有的图片分成像"斑马"，"达尔马西亚狗"，"洗碗工"等 [1000 个类别] 是计算机视觉领域的一个标准任务，
+将所有的图片分成像『斑马』，『达尔马西亚狗』，『洗碗工』等 [1000 个类别] 是计算机视觉领域的一个标准任务，
 例如下面这些图片就是 [AlexNet] 模型分类的结果：
 
 <div style="width:50%; margin:auto; margin-bottom:10px; margin-top:20px;">
@@ -118,13 +118,13 @@ I tensorflow/examples/label_image/main.cc:206] bulletproof vest (466): 0.0053508
   <img style="width:100%" src="https://www.tensorflow.org/images/grace_hopper.jpg">
 </div>
 
-下面你可以通过 --image= 参数来检测一张自己的图片试试，例如：
+下面你可以通过 --image= argument 来检测一张自己的图片试试，例如：
 
 ```bash
 bazel-bin/tensorflow/examples/label_image/label_image --image=my_image.png
 ```
 
-如果你仔细浏览 [`tensorflow/examples/label_image/main.cc`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/    main.cc)
+如果你仔细浏览 [`tensorflow/examples/label_image/main.cc`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc)
 这个文件，你可以看到
 它是如何工作的。我们希望这部分代码会帮助你将 TensorFlow 整合到
 你自己的应用中，所以我们会通过这些主要的函数一步一步的向你展示：
@@ -357,7 +357,7 @@ int main(int argc, char* argv[]) {
 
 ```C++
   // 这里是为了保证我们在默认设置下得到了我们想要结果的自动测试程序。
-  // 我们知道标签 866 (军装）应该
+  // 我们知道标签 866（军装）应该
   // 是 Admiral Hopper 图片的最高层标签。
   if (FLAGS_self_test) {
     bool expected_matches;
