@@ -32,8 +32,8 @@ TensorFlow 现在支持在一台或者多台计算机上的多个设备（CPUs �
 相反，TensorFlow 还鼓励用户去构建
 复杂的表达式（类似于整个神经网络和它的梯度）来作为
 一个数据流图。你相当于节约了整个一个 TensorFlow @{tf.Session} 的数据流图（或者它的子图）
-的计算，这样它就可以更有效率的执行整个计算，而一步一步的
-执行操作显然是低效的。
+的计算，这样它就可以更有效率的执行整个计算，而不是一步一步的
+执行操作。
 
 #### 设备是如何命名的？
 
@@ -45,7 +45,7 @@ TensorFlow 现在支持在一台或者多台计算机上的多个设备（CPUs �
 为了在一个设备上执行一组操作，你可以在 
 @{tf.device$`with tf.device(name):`} 的上下文中创建它们。
 查看 how-to 文档 @{$using_gpu$using GPUs with TensorFlow} 
-可以了解到 TensorFlow 给设备分配操作的消息信息，
+可以了解到 TensorFlow 给设备分配操作的详细信息，
 @{$deep_cnn$CIFAR-10 tutorial} 这篇文档
 则展示了使用多个 GPUs 的示例模型。
 
@@ -63,10 +63,8 @@ Feeding 是 TensorFlow Session API 的一个机制，它允许你
 的字典，这个字典将会在执行步骤的时候作为 tensors 的数值
 被使用。
 
-通常情况下，当你拥有确定的 tensors 时，例如输入，那么它会一直被供给。
-@{tf.placeholder} 这个操作允许你
-定义**必须**被供给的 tensors，还可以让你随意的限制
-它们的 shape。
+通常情况下，你会有一些待赋值的输入张量 ( input tensors ) 。
+@{tf.placeholder} 对象允许你定义这些待赋值的张量并规定它们的形状。
 @{$beginners$beginners' MNIST tutorial} 这篇文档展示
 了 placeholders 和 feeding 是如何给一个
 神经网络提供训练数据的。
@@ -108,9 +106,9 @@ Session 可以拥有一些资源，例如
 调用 @{tf.Session.close} 在 
 session 被关闭的时候释放的，
 
-作为调用 @{$python/client$`Session.run()`} 的一部分，
-被创建的中间的 tensors 将会在调用或者调用之前
-被释放掉。
+作为调用 @{$python/client$`Session.run()`} 的一部分
+而被创建的中间的 tensors 将会在调用或者
+调用之前被释放掉。
 
 #### 运行时的 graph 执行是并行的吗？
 
@@ -177,8 +175,8 @@ TensorFlow 支持多个 GPUs 和 CPUs。查看 how-to 文档（
 #### 当这些变量被并发调用时，表现如何？
 
 变量允许并发的执行读和写操作。但是在被并发更新的时候
-从一个变量中读取的数值可能会改变。默认情况下，在没有共同排斥的前提下，对一个变量
-并发的分配操作是没问题的。
+从一个变量中读取的数值可能会改变。默认情况下，在没有互斥的前提下，对一个变量
+并发的赋值操作是没问题的。
 通过给 @{tf.Variable.assign} 传递 `use_locking=True` 这样一个参数，
 可以在分配变量时获得一个锁。
 
@@ -196,7 +194,7 @@ TensorFlow 支持多个 GPUs 和 CPUs。查看 how-to 文档（
 也有可能是通过 
 @{tf.TensorShape$partially complete} 推测出来的。如果静态的 shape 
 并没有被完全的定义，那么一个 `Tensor` 的动态 shape `t` 可以通过
-估计 @{tf.shape$`tf.shape(t)`} 来决定。
+调用 @{tf.shape$`tf.shape(t)`} 来决定。
 
 #### `x.set_shape()` 和 `x = tf.reshape(x)` 的区别是什么？
 
@@ -212,7 +210,7 @@ TensorFlow 支持多个 GPUs 和 CPUs。查看 how-to 文档（
 
 通常来说建立一个拥有可变批量大小的 graph 都是非常有用的，
 因为这样的话，同样的代码即可以使用在（mini-）批训练，又可以使用在
-单实例接口上训练。作为结果的 graph 可以是 
+单实例推理上训练。作为结果的 graph 可以是 
 @{tf.Graph.as_graph_def$saved as a protocol buffer} 
 或 
 @{tf.import_graph_def$imported into another program}。
@@ -222,7 +220,7 @@ TensorFlow 支持多个 GPUs 和 CPUs。查看 how-to 文档（
 符号 `Tensor` 去代表它。下面的这些 tips 或许会对你有帮助：
 
 * 使用 [`batch_size = tf.shape(input)[0]`](../api_docs/python/array_ops.md#shape) 
-  来从一个 `Tensor` 中解压出叫做 `input` 的多维数据，并且把它
+  来从一个 `Tensor` 中获取表示批维度的 `input` 变量，并且把它
   储存在一个叫 `batch_size` 的 `Tensor` 中。
 
 * 使用 @{tf.reduce_mean} 
@@ -238,14 +236,14 @@ TensorFlow 支持多个 GPUs 和 CPUs。查看 how-to 文档（
 #### 向 TensorBoard 发送数据的最简单方法是什么？
 
 给你的 TensorFlow graph 添加一些摘要的操作，并且
-把这些摘要写在一个日志文件中。然后使用下面的命令开始 TensorBoard：
+把这些摘要写在一个日志文件中。然后使用下面的命令启动 TensorBoard：
 
     python tensorflow/tensorboard/tensorboard.py --logdir=path/to/log-directory
 
 更多详细的信息，请查看 
 @{$summaries_and_tensorboard$Summaries and TensorBoard tutorial}。
 
-#### 每次我登录到 TensorBoard 时，就会得到一个网络安全的弹出框！
+#### 每次我启动 TensorBoard 时，就会得到一个网络安全的弹出框！
 
 你可以使用 --host=localhost 这个参数将 TensorBoard 运行在 localhost，
 而不是 '0.0.0.0'。这样就不会有安全警告了。
