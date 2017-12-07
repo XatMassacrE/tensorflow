@@ -21,7 +21,7 @@ TensorFlow 现在支持在一台或者多台计算机上的多个设备（CPUs �
 
 ## 建立一个 TensorFlow graph
 
-同时查看
+请查看
 @{$python/framework$API documentation on building graphs}。
 
 #### 为什么 `c = tf.matmul(a, b)` 不会立即执行矩阵乘法？
@@ -52,7 +52,7 @@ TensorFlow 现在支持在一台或者多台计算机上的多个设备（CPUs �
 
 ## 执行一个 TensorFlow 计算
 
-同时查看 
+请查看 
 @{$python/client$API documentation on running graphs} 这个文档。
 
 #### 什么是 feeding 和 placeholder？
@@ -162,7 +162,7 @@ TensorFlow 支持多个 GPUs 和 CPUs。查看 how-to 文档（
 
 ## 变量
 
-同时查看关于 @{$variables$variables} 和 
+请查看关于 @{$variables$variables} 和 
 @{$python/state_ops$the API documentation for variables} 的 how-to 文档。
 
 #### 什么是一个变量的生命周期？
@@ -182,7 +182,7 @@ TensorFlow 支持多个 GPUs 和 CPUs。查看 how-to 文档（
 
 ## Tensor shapes
 
-同时查看 
+请查看 
 @{tf.TensorShape}。
 
 #### 在 Python 中我如何决定一个 tensor 的 shape ？
