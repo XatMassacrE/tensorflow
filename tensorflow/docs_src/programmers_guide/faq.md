@@ -190,7 +190,7 @@ TensorFlow 支持多个 GPUs 和 CPUs。查看 how-to 文档（
 在 TensorFlow 中，一个 tensor 同时拥有一个静态的（推测出的）的 shape 和 一个
 动态的（真实的）的 shape。这个静态的 shape 可以使用方法 
 @{tf.Tensor.get_shape} 
-读取到：这个 shape 是通过我们过去创建 tensor 的操作推测出来的，
+获取到：这个 shape 是通过我们过去创建 tensor 的操作推测出来的，
 也有可能是通过 
 @{tf.TensorShape$partially complete} 推测出来的。如果静态的 shape 
 并没有被完全的定义，那么一个 `Tensor` 的动态 shape `t` 可以通过
@@ -282,14 +282,14 @@ TensorFlow 支持多个 GPUs 和 CPUs。查看 how-to 文档（
 
 #### TensorFlow 的代码风格是什么样的？
 
-TensorFlow Python API 的代码风格是坚持 
-[PEP8](https://www.python.org/dev/peps/pep-0008/) 的约定的。<sup>*</sup>
+TensorFlow Python API 的代码风格是遵循 
+[PEP8](https://www.python.org/dev/peps/pep-0008/) 的约定。<sup>*</sup>
 要注意的是，我们使用 `CamelCase` 来对类进行命名，使用 `snake_case` 来对
 函数，方法以及属性进行命名。同时我们也坚持 
 [Google Python style guide](https://google.github.io/styleguide/pyguide.html)。
 
-TensorFlow C++ 代码风格坚持 
-[Google C++ style guide](http://google.github.io/styleguide/cppguide.html)。
+TensorFlow C++ 代码风格遵循 
+[Google C++ style guide](http://google.github.io/styleguide/cppguide.html) 的约定。
 
 (<sup>*</sup>有一个例外是：我们使用 2 个空格进行缩进，而不是 4 个。)
 
